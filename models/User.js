@@ -19,16 +19,32 @@ User.prototype.cleanUp = function() {
 }
 
 //Login using a callback function
-User.prototype.login = function(callback) {
-  this.cleanUp();
-  usersCollection.findOne({username: this.data.username}, (err, attemptedUser) => {
-    if (attemptedUser && attemptedUser.password == this.data.password) {
-      callback("Congrats")
-    } else {
-      callback("Invalid username/data") 
-    }
+// User.prototype.login = function(callback) {
+//   this.cleanUp();
+//   usersCollection.findOne({username: this.data.username}, (err, attemptedUser) => {
+//     if (attemptedUser && attemptedUser.password == this.data.password) {
+//       callback("Congrats")
+//     } else {
+//       callback("Invalid username/data") 
+//     }
+//   })
+// }
+
+User.prototype.login = function() {
+  return new Promise((resolve, reject) => {
+    this.cleanUp();
+    usersCollection.findOne({username: this.data.username}).then(attemptedUser => {
+      if (attemptedUser && attemptedUser.password == this.data.password) {
+        resolve("Congrats")
+      } else {
+        reject("Invalid username/password")
+      }
+    }).catch(() => {
+      reject("Please try again later")
+    })
   })
 }
+
 
 User.prototype.validate = function() {
   if (this.data.username == '') {this.errors.push("You must provide a username")}
