@@ -12,6 +12,7 @@ const User = require('../models/User.js')
 exports.login = function(req, res) {
   let user = new User(req.body);
   user.login().then(result => {
+    req.session.user = {username: user.data.username}
     res.send(result)
   }).catch(e => {
     res.send(e);
@@ -32,8 +33,12 @@ exports.register = function(req, res) {
     res.send("Congrats")
   }
 }
-
+ 
 exports.home  = function(req, res) {
-  res.render('home-guest');
+  if (req.session.user) {
+    res.send("Welcome")
+  } else {
+    res.render('home-guest');
+  }
 }
 
