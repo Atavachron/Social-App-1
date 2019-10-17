@@ -1,4 +1,5 @@
 const validator = require('validator');
+const md5 = require('md5');
 const usersCollection = require('../db').db().collection('users');
 const bcrypt = require('bcryptjs');
 
@@ -36,6 +37,8 @@ User.prototype.login = function() {
     this.cleanUp();
     usersCollection.findOne({username: this.data.username}).then(attemptedUser => {
       if (attemptedUser && bcrypt.compareSync(this.data.password, attemptedUser.password)) {
+        this.data = attemptedUser;
+        this.getAvatar();
         resolve("Congrats")
       } else {
         reject("Invalid username/password")
@@ -85,11 +88,16 @@ User.prototype.register = async function() {
       this.data.password = bcrypt.hashSync(this.data.password, salt)
       //save the data in the database
       await usersCollection.insertOne(this.data);
-      resolve()
+      this.getAvatar();
+      resolve();
     } else {
       reject(this.errors)
     }
   })
+}
+
+User.prototype.getAvatar = function() {
+  this.avatar = `https://gravatar.com/avatar/${md5(this.data.email)}?s=128`;
 }
 
 module.exports = User;
