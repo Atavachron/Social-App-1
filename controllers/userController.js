@@ -9,6 +9,17 @@ const User = require('../models/User.js')
 //   });
 // }
 
+exports.mustBeLoggedIn = function(req, res, next) {
+  if (req.session.user) {
+    next();
+  } else {
+    req.flash('errors', 'You must be logged in to perform this action');
+    req.session.save(function() {
+      res.redirect('/');
+    })
+  }
+}
+
 exports.login = function(req, res) {
   let user = new User(req.body);
   user.login().then(result => {
