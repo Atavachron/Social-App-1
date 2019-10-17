@@ -13,7 +13,12 @@ let sessionOptions = session({
 })
 
 app.use(sessionOptions);
-app.use(flash())
+app.use(flash());
+
+app.use(function(req, res, next) {
+  res.locals.user = req.session.user;
+  next();
+});
 
 const port = process.env.PORT || 3000;
 const router = require('./router.js');
