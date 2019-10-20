@@ -58,7 +58,9 @@ Post.findSingleById = function(id) {
         author: {$arrayElemAt: ["$authorDocument", 0]} 
       }}
     ]).toArray()
+
     //clean up author property in each post object
+    
     if (posts.length) {
       console.log(posts[0])
       resolve(posts[0]);
