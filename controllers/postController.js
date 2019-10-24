@@ -20,4 +20,4 @@ exports.viewSingle = async function(req, res) {
   } catch {
     res.render('404');
   }
-}
+}   

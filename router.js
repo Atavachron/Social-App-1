@@ -14,16 +14,8 @@ router.get('/create-post', userController.mustBeLoggedIn, postController.viewCre
 router.post('/create-post', userController.mustBeLoggedIn, postController.create)
 router.get('/post/:id', postController.viewSingle)
 
+//Profile related routes
+router.get('/profile/:username', userController.ifUserExists, userController.profilePostsScreen)
+
 module.exports = router;
 
-
-
-
-// const express = require('express');
-// const router = express.Router();
-
-// router.get('/', (req, res) => {
-//   res.render('home-guest')
-// })
-
-// module.exports = router; 
