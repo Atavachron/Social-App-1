@@ -1,13 +1,7 @@
 const User = require('../models/User.js')
+const Post = require('../models/Post.js')
 
 
-//Login using a callback function :
-// exports.login = function(req, res) {
-//   let user = new User(req.body);
-//   user.login(function(result) {
-//     res.send(result)
-//   });
-// }
 
 exports.mustBeLoggedIn = function(req, res, next) {
   if (req.session.user) {
@@ -78,8 +72,15 @@ exports.ifUserExists = function(req, res, next) {
 }
 
 exports.profilePostsScreen = function(req, res) {
-  res.render('profile', {
-    profileUsername: req.profileUser.username,
-    profileAvatar: req.profileUser.avatar
-  });
+  Post.findByAuthorId(req.profileUser._id).then(posts => {
+    res.render('profile', {
+      posts: posts,
+      profileUsername: req.profileUser.username,
+      profileAvatar: req.profileUser.avatar
+    });
+  }).catch(() => {
+    res.render("404")
+  }) 
+
+ 
 }
