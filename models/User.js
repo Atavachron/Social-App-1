@@ -3,7 +3,7 @@ const md5 = require('md5');
 const usersCollection = require('../db').db().collection('users');
 const bcrypt = require('bcryptjs');
 
-let User = function(data) {
+let User = function(data, getAvatar) {
   this.data = data;
   this.errors = [];
 }
@@ -19,18 +19,6 @@ User.prototype.cleanUp = function() {
      password: this.data.password
    }
 }
-
-//Login using a callback function
-// User.prototype.login = function(callback) {
-//   this.cleanUp();
-//   usersCollection.findOne({username: this.data.username}, (err, attemptedUser) => {
-//     if (attemptedUser && attemptedUser.password == this.data.password) {
-//       callback("Congrats")
-//     } else {
-//       callback("Invalid username/data") 
-//     }
-//   })
-// }
 
 User.prototype.login = function() {
   return new Promise((resolve, reject) => {
