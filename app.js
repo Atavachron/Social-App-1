@@ -18,7 +18,7 @@ app.use(sessionOptions);
 app.use(flash());
 
 app.use(function(req, res, next) {
-  //Make markdown available from templates
+  //Make markdown available from ejs templates
   res.locals.filterUserHTML = function(content) {
     return sanitizeHTML(markdown(content), {allowedTags: ['p', 'br', 'ul', 'ol', 'li', 'strong', 'bold', 'i', 'em', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'], allowedAttributes: {}});
   }
