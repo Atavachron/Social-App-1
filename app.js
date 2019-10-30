@@ -55,10 +55,17 @@ app.use('/', router);
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
+io.use(function(socket, next) {
+  sessionOptions(socket.request, socket.request.res, next)
+})
+
 io.on('connection', function(socket) {
-  socket.on('chatMessageFromBrowser', (data) => {
-    io.emit('chatMessageFromServer', {message: data.message})
-  })
+  if (socket.request.session.user) {
+    let user = socket.request.session.user
+    socket.on('chatMessageFromBrowser', (data) => {
+      io.emit('chatMessageFromServer', {message: data.message, username: user.username, avatar: user.avatar})
+    })
+  }
 })
 
 
