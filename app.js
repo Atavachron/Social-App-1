@@ -7,6 +7,11 @@ const app = express();
 const markdown = require('marked');
 const sanitizeHTML = require('sanitize-html')
 
+app.use(express.urlencoded({extended: false}));
+app.use(express.json());
+app.use('/api', require('./router-api'))
+
+
 let sessionOptions = session({
   secret: "This is the secret!",
   store: new MongoStore({client: require('./db')}),
@@ -45,8 +50,6 @@ const router = require('./router.js');
 
 
 app.use(express.static('public'));
-app.use(express.urlencoded({extended: false}));
-app.use(express.json());
 
 app.set('views', 'views');
 app.set('view engine', 'ejs');  
