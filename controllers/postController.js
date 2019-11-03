@@ -4,6 +4,7 @@ exports.viewCreateScreen = function(req, res) {
   res.render('create-post');
 }
 
+
 exports.create = function(req, res) {
   let post = new Post(req.body, req.session.user._id);
   post.create().then(newId => {
@@ -79,6 +80,14 @@ exports.delete = function(req, res) {
   }).catch(() => {
     req.flash("errors", "You do not have permission to perform the action");
     req.session.save(() => res.redirect("/"))
+  });
+}
+
+exports.apiDelete = function(req, res) {
+  Post.delete(req.params.id, req.apiUser._id).then(() => {
+    res.json("Success")
+  }).catch(() => {
+    res.json("You do not have permission to perform this action")
   });
 }
 
